@@ -17,10 +17,10 @@ open class MaxHeap<T>(compare: (e1: T, e2: T) -> Int) : Heap<T>(compare, 1)
 open class MinHeap<T>(compare: (e1: T, e2: T) -> Int) : Heap<T>(compare, -1)
 
 /**
- * @param expectedComparison Expected comparison result when compare using [compareTo] an element which should
- * be upper than compared one.
+ * @param upperComparison Expected response when compare using [compareTo] an element which
+ * should be above than compared one.
  */
-open class Heap<T>(private val compareTo: T.(other: T) -> Int, private val expectedComparison: Int) {
+open class Heap<T>(private val compareTo: T.(other: T) -> Int, private val upperComparison: Int) {
     private val array = arrayListOf<T>()
 
     val top get() = array.getOrNull(0)
@@ -28,12 +28,11 @@ open class Heap<T>(private val compareTo: T.(other: T) -> Int, private val expec
     fun add(element: T) {
         array.add(element)
         bubbleUp(array.size - 1)
-
     }
 
     private fun bubbleUp(index: Int) {
         val parent = array.getOrNull(index.parent) ?: return
-        if (parent.compareTo(array[index]) == expectedComparison) return
+        if (parent.compareTo(array[index]) == upperComparison) return
 
         swap(index, index.parent)
         bubbleUp(index.parent)
@@ -42,7 +41,7 @@ open class Heap<T>(private val compareTo: T.(other: T) -> Int, private val expec
     fun removeRoot() = removeAt(0)
 
     /**
-     * On steroids deletion. Deletes any elements of heap
+     * On steroids deletion. Deletes any elements of heap.
      */
     fun removeAt(index: Int) {
         if (index < 0 || array.size - 1 < index) throw ArrayIndexOutOfBoundsException()
@@ -50,7 +49,7 @@ open class Heap<T>(private val compareTo: T.(other: T) -> Int, private val expec
         array[index] = array[array.size - 1]
 
         val parent = array.getOrNull(index.parent)
-        if (parent == null || parent.compareTo(array[index]) == expectedComparison) {
+        if (parent == null || parent.compareTo(array[index]) == upperComparison) {
             bubbleDown(index)
         } else {
             bubbleUp(index)
@@ -63,7 +62,7 @@ open class Heap<T>(private val compareTo: T.(other: T) -> Int, private val expec
 
         val childToSwapIndex = when {
             secondChild == null -> index.firstChild
-            firstChild.compareTo(secondChild) == expectedComparison -> index.firstChild
+            firstChild.compareTo(secondChild) == upperComparison -> index.firstChild
             else -> index.secondChild
         }
         swap(index, childToSwapIndex)
