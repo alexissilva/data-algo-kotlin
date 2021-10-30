@@ -4,10 +4,22 @@ class MaxHeapInt : MaxHeap<Int>(Int::compareTo)
 
 class MinHeapInt : MinHeap<Int>(Int::compareTo)
 
+/**
+ * @param compare Should return zero if first element [e1] is equal to [e2], a negative number if it's less,
+ * or a positive number if it's greater.
+ */
 open class MaxHeap<T>(compare: (e1: T, e2: T) -> Int) : Heap<T>(compare, 1)
 
+/**
+ * @param compare Should return zero if first element [e1] is equal to [e2], a negative number if it's less,
+ * or a positive number if it's greater.
+ */
 open class MinHeap<T>(compare: (e1: T, e2: T) -> Int) : Heap<T>(compare, -1)
 
+/**
+ * @param expectedComparison Expected comparison result when compare using [compareTo] an element which should
+ * be upper than compared one.
+ */
 open class Heap<T>(private val compareTo: T.(other: T) -> Int, private val expectedComparison: Int) {
     private val array = arrayListOf<T>()
 
